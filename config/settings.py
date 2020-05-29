@@ -39,9 +39,26 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+
+INSTALLED_APPS += [
+    'corsheaders',
+    'rest_framework',
+    'django_filters',
+]
+
+
+INSTALLED_APPS += [
+    'utils',
+    'accounts',
+    'products',
+    'carts',
+    'acceptances',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -118,3 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Cors Header
+CORS_ORIGIN_ALLOW_ALL = True
