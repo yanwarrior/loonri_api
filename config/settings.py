@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
 ]
 
@@ -139,3 +140,11 @@ STATIC_URL = '/static/'
 
 # Cors Header
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# Django Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2,
+    'EXCEPTION_HANDLER': 'hipo_drf_exceptions.handler',
+}
