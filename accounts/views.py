@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 
-from accounts.serializers import UserSerializer, UserRegisterSerializer
+from accounts.serializers import UserSerializer, UserRegisterSerializer, SignInSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -49,6 +49,32 @@ class UserViewSet(viewsets.ModelViewSet):
             'token': f'Token {token.key}',
             'is_active': user.is_active
         }, 200)
+
+    @action(detail=False, methods=['POST'])
+    def sign_in(self, request):
+        try:
+            serializer = SignInSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            username = serializer.data.get('username')
+            password = serializer.data.get('password')
+
+            user = User.objects.get(username=username)
+            password_check = user.check_password(password)
+            if not password_check:
+                raise ValidationError('Password does not match!')
+
+            token = Token.objects.get(user=user)
+            return Response({
+                'username': user.username,
+                'email': user.email,
+                'token': f'Token {token.key}',
+                'is_active': user.is_active
+            }, 200)
+
+        except User.DoesNotExist:
+            raise ValidationError('User not registered')
+        except Exception as e:
+            raise ValidationError(e)
 
     def update(self, request, *args, **kwargs):
         raise NotFound(detail='Your request not found')
