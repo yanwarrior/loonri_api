@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from accounts.serializers import UserSerializer, UserRegisterSerializer, SignInSerializer
@@ -25,7 +25,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         raise NotFound(detail='Your request not found')
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def register(self, request):
         serializer = UserRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -50,7 +50,7 @@ class UserViewSet(viewsets.ModelViewSet):
             'is_active': user.is_active
         }, 200)
 
-    @action(detail=False, methods=['POST'])
+    @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
     def sign_in(self, request):
         try:
             serializer = SignInSerializer(data=request.data)
