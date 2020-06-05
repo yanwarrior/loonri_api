@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from acceptances.models import Acceptance, Item
+
+admin.site.register(Acceptance)
+admin.site.register(Item)

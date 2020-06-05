@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from acceptances.views import AcceptanceViewSet, ItemViewSet
+from accounting.views import ProfossViewSet
 from accounts.views import UserViewSet
 from carts.views import CartViewSet
 from products.views import ProductViewSet
@@ -31,4 +33,7 @@ router = DefaultRouter()
 router.register(r'products', ProductViewSet, basename='product')
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'carts', CartViewSet, basename='cart')
+router.register(r'acceptances', AcceptanceViewSet, basename='acceptance')
+router.register(r'items', ItemViewSet, basename='item')
+router.register(r'profoss', ProfossViewSet, basename='profoss')
 urlpatterns += router.urls

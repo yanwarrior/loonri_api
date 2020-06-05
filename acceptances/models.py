@@ -1,12 +1,24 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.timezone import now
 
+from carts.models import Cart
 from products.models import Product
 from utils.models import Timestamp
 
 
 class Acceptance(Timestamp):
+    STATUS_WASHED = 'WASHED'
+    STATUS_COMPLETED = 'COMPLETED'
+    STATUS_TAKED = 'TAKED'
+    STATUS_CHOICES = (
+        (STATUS_WASHED, 'Washed'),
+        (STATUS_COMPLETED, 'Completed'),
+        (STATUS_TAKED, 'Taked'),
+    )
+
     acceptance_number = models.CharField(max_length=20, unique=True)
     acceptance_date = models.DateField(default=now)
     user = models.ForeignKey(
@@ -22,8 +34,7 @@ class Acceptance(Timestamp):
     total = models.PositiveIntegerField(default=0)
     down_payment = models.PositiveIntegerField(default=0)
     residual = models.PositiveIntegerField(default=0)
-    is_washed = models.BooleanField(default=False)
-    is_taked = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=STATUS_WASHED)
 
     def __str__(self):
         return self.acceptance_number
@@ -49,6 +60,5 @@ class Item(Timestamp):
 
     def __str__(self):
         return self.product.product_number
-
 
 
